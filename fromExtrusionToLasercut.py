@@ -241,11 +241,11 @@ for item in slabHeightList:
 
 # dict{rowRemain} is a dict of {rowNum: remaining space}
 rowRemain = {0: materialWidth}
-# list[SortedRowRemainKeyList] is an ascending sorted list of [value of rowRemain]
-SortedRowRemainValueList = [materialWidth]
-# list[SortedRowRemainKeyList] is a sorted list of [key of rowRemain]
-# --- corresponding to SortedRowRemainValueList
-SortedRowRemainKeyList = [0]
+# list[sortedRowRemainKeyList] is an ascending sorted list of [value of rowRemain]
+sortedRowRemainValueList = [materialWidth]
+# list[sortedRowRemainKeyList] is a sorted list of [key of rowRemain]
+# --- corresponding to sortedRowRemainValueList
+sortedRowRemainKeyList = [0]
 # objBox(topRowHighestObj) is a float showing the height of the top row
 topRowHighestObj = slabHeightList[0]
 
@@ -256,7 +256,7 @@ for objBox in slabHeightList:
     if objBox.width > materialWidth:
         #put it elsewhere
         pass
-    elif objBox.width > SortedRowRemainValueList[len(SortedRowRemainValueList) - 1]:
+    elif objBox.width > sortedRowRemainValueList[len(sortedRowRemainValueList) - 1]:
         #find existing top row's starting pt0
         existingPt0 = [lasercutPt0[0], rowPt0[len(rowPt0) - 1][1], lasercutPt0[2]]
         #find the pt0 for placing this objBox
@@ -268,22 +268,22 @@ for objBox in slabHeightList:
         rs.MoveObjects(objBox.id, vecTran)
         #change dict{rowRemain}
         rowRemain[len(rowRemain) - 1] -= objBox.width
-        SortedRowRemainValueList = sorted(rowRemain.values())
-        SortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
+        sortedRowRemainValueList = sorted(rowRemain.values())
+        sortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
         #change dict{rowPt0}
         rowPt0[len(rowPt0)] = rs.VectorAdd(newRowPt0, objBox.vecHor)
         #change objBox(topRowHighestObj)
         topRowHighestObj = objBox
     else:
         # find its suitable position in dict{rowRemain}
-        indexInSortedList = bisect.bisect_left(SortedRowRemainValueList, objBox.width)
-        rowNum = SortedRowRemainKeyList[indexInSortedList]
+        indexInsortedList = bisect.bisect_left(sortedRowRemainValueList, objBox.width)
+        rowNum = sortedRowRemainKeyList[indexInsortedList]
         # move the slabs to that row according to dict{rowPt0}
         vecTran = rs.VectorSubtract(rowPt0[rowNum], objBox.pt0)
         rs.MoveObjects(objBox.id, vecTran)
         # change dict{rowRemain}
         rowRemain[rowNum] -= objBox.width
-        SortedRowRemainValueList = sorted(rowRemain.values())
-        SortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
+        sortedRowRemainValueList = sorted(rowRemain.values())
+        sortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
         # change dict{rowPt0}
         rowPt0[rowNum] = rs.VectorAdd(rowPt0[rowNum], objBox.vecHor)
