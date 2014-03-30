@@ -169,8 +169,8 @@ addText(objs, textHeight, textLayer)
 # rotate each extrusion to fit a min lateral rectangle
 objList = []
 for item in objs:
-    result = rotateMinBoundingBox(item)
-    item = ObjBox(result[0], result[1], result[2], result[3])
+    id, pt0, vecHor, vecVer = rotateMinBoundingBox(item)
+    item = ObjBox(id, pt0, vecHor, vecVer)
 
     objList.append(item)
 
