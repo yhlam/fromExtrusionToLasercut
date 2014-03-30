@@ -6,7 +6,7 @@ import rhinoscriptsyntax as rs
 import scriptcontext
 
 
-class objBox:
+class ObjBox:
     def __init__(self, id, pt0, vecHor, vecVer):
         self.id = id
         self.pt0 = pt0
@@ -173,7 +173,7 @@ addText(objs, textHeight, textLayer)
 objList = []
 for item in objs:
     result = rotateMinBoundingBox(item)
-    item = objBox(result[0], result[1], result[2], result[3])
+    item = ObjBox(result[0], result[1], result[2], result[3])
 
     objList += [item]
 
@@ -207,7 +207,7 @@ for item in objList:
 
 
     #objBox obj
-    slabGroup = objBox(slabGroup, pt0, rs.VectorSubtract(pt1, pt0), rs.VectorSubtract(pt3, pt0))
+    slabGroup = ObjBox(slabGroup, pt0, rs.VectorSubtract(pt1, pt0), rs.VectorSubtract(pt3, pt0))
 
 
     slabHeightList += [slabGroup]
