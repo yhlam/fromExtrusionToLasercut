@@ -90,10 +90,10 @@ def rotateMinBoundingBox(obj):
     angle = 0
 
     for i in range(0, 90, 5):
-	    rotatedPeri = rotatePeriHalf(obj, center, i)
-	    if rotatedPeri < periHalf:
-	        periHalf = rotatedPeri
-	        angle = i
+        rotatedPeri = rotatePeriHalf(obj, center, i)
+        if rotatedPeri < periHalf:
+            periHalf = rotatedPeri
+            angle = i
 
     return rotateFinal(obj, center, angle)
 
