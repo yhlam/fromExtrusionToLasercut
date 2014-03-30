@@ -1,8 +1,9 @@
-import rhinoscriptsyntax as rs
 import operator
-import scriptcontext
-import bisect
 import random
+
+import bisect
+import rhinoscriptsyntax as rs
+import scriptcontext
 
 
 
