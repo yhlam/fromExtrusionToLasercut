@@ -25,8 +25,7 @@ def getWidth(objBox):
 
 
 def addText(objs, textHeight, textLayer):
-    num = 0
-    for obj in objs:
+    for num, obj in enumerate(objs):
         box = rs.BoundingBox(obj)
         center = rs.VectorScale(rs.VectorAdd(box[0], box[2]), 0.5)
         textCenterVector = rs.VectorAdd(rs.VectorScale([1, 0, 0], textHeight / 3), rs.VectorScale([0, 1, 0], textHeight / 2))
@@ -34,7 +33,6 @@ def addText(objs, textHeight, textLayer):
 
         text = rs.AddText(str(num), textBase, height=textHeight)
         rs.ObjectLayer(text, layer=textLayer)
-        num += 1
 
 
 def rotatePeriHalf(obj, center, angle):
@@ -182,8 +180,7 @@ for item in objs:
 # slabMulti
 # adding suitable amount of slabs for each extrusion, and rotate the slabs to a min lateral rectangle
 slabHeightList = []
-i = 0
-for item in objList:
+for i, item in enumerate(objList):
 
     slabGroup = slabMulti(item.id, i, lasercutLayer)
     box = rs.BoundingBox(slabGroup)
@@ -211,7 +208,6 @@ for item in objList:
 
 
     slabHeightList += [slabGroup]
-    i += 1
 
 
 
