@@ -173,7 +173,7 @@ for item in objs:
     result = rotateMinBoundingBox(item)
     item = ObjBox(result[0], result[1], result[2], result[3])
 
-    objList += [item]
+    objList.append(item)
 
 
 
@@ -207,7 +207,7 @@ for i, item in enumerate(objList):
     slabGroup = ObjBox(slabGroup, pt0, rs.VectorSubtract(pt1, pt0), rs.VectorSubtract(pt3, pt0))
 
 
-    slabHeightList += [slabGroup]
+    slabHeightList.append(slabGroup)
 
 
 
