@@ -6,6 +6,17 @@ import scriptcontext
 
 
 class ObjBox:
+    """ObjBox
+
+    Attributes
+    ----------
+    id
+    pt0
+    vecHor
+    vecVer
+    width
+    height
+    """
     def __init__(self, id, pt0, vecHor, vecVer):
         self.id = id
         self.pt0 = pt0
@@ -16,10 +27,20 @@ class ObjBox:
 
 
 def getHeight(objBox):
+    """Get the height of an ObjBox
+
+    :param objBox: ObjBox
+    :return: height of the given ObjBox
+    """
     return objBox.height
 
 
 def getWidth(objBox):
+    """Get the width of an ObjBox
+
+    :param objBox: ObjBox
+    :return: width of the given ObjBox
+    """
     return objBox.width
 
 
