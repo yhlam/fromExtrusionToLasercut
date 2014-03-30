@@ -28,8 +28,8 @@ def addText(objs, textHeight, textLayer):
     num = 0
     for obj in objs:
         box = rs.BoundingBox(obj)
-        center = rs.VectorScale(rs.VectorAdd(box[0], box[2]),0.5)
-        textCenterVector = rs.VectorAdd(rs.VectorScale([1,0,0],textHeight/3), rs.VectorScale([0,1,0],textHeight/2))
+        center = rs.VectorScale(rs.VectorAdd(box[0], box[2]), 0.5)
+        textCenterVector = rs.VectorAdd(rs.VectorScale([1, 0, 0], textHeight / 3), rs.VectorScale([0, 1, 0], textHeight / 2))
         textBase = rs.VectorSubtract(center, textCenterVector)
 
         text = rs.AddText(str(num), textBase, height=textHeight)
@@ -46,7 +46,7 @@ def rotatePeriHalf(obj, center, angle):
     pt2 = box[2]
     periHalf = rs.Distance(pt0, pt1) + rs.Distance(pt1, pt2)
 
-    rs.RotateObjects(objRotated, center, angle*(-1))
+    rs.RotateObjects(objRotated, center, angle * (-1))
 
     return periHalf
 
@@ -106,7 +106,7 @@ def slabMulti(id, index, lasercutLayer):
     pathStart = extru.PathStart
     pathEnd = extru.PathEnd
 
-    start_curve = extru.Profile3d(0,0)
+    start_curve = extru.Profile3d(0, 0)
     baseCrv = scriptcontext.doc.Objects.AddCurve(start_curve)
     rs.ObjectLayer(baseCrv, layer=lasercutLayer)
 
@@ -234,15 +234,15 @@ SortedRowRemainKeyList = [0]
 topRowHighestObj = slabHeightList[0]
 
 # dict[rowPt0] is a dict of {rowNum: pt0 of remaining space}  pt0 = [x, y, z]
-rowPt0 = {0:lasercutPt0}
+rowPt0 = {0: lasercutPt0}
 
 for objBox in slabHeightList:
     if objBox.width > materialWidth:
         #put it elsewhere
         pass
-    elif objBox.width > SortedRowRemainValueList[len(SortedRowRemainValueList)-1]:
+    elif objBox.width > SortedRowRemainValueList[len(SortedRowRemainValueList) - 1]:
         #find existing top row's starting pt0
-        existingPt0 = [lasercutPt0[0], rowPt0[len(rowPt0)-1][1], lasercutPt0[2]]
+        existingPt0 = [lasercutPt0[0], rowPt0[len(rowPt0) - 1][1], lasercutPt0[2]]
         #find the pt0 for placing this objBox
         newRowPt0 = rs.VectorAdd(existingPt0, topRowHighestObj.vecVer)
         #add a new row
@@ -251,7 +251,7 @@ for objBox in slabHeightList:
         vecTran = rs.VectorSubtract(newRowPt0, objBox.pt0)
         rs.MoveObjects(objBox.id, vecTran)
         #change dict{rowRemain}
-        rowRemain[len(rowRemain)-1] -= objBox.width
+        rowRemain[len(rowRemain) - 1] -= objBox.width
         SortedRowRemainValueList = sorted(rowRemain.values())
         SortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
         #change dict{rowPt0}
