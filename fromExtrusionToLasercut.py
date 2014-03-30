@@ -6,7 +6,6 @@ import rhinoscriptsyntax as rs
 import scriptcontext
 
 
-
 class objBox:
     def __init__(self, id, pt0, vecHor, vecVer):
         self.id = id
@@ -16,20 +15,18 @@ class objBox:
         self.width = rs.VectorLength(vecHor)
         self.height = rs.VectorLength(vecVer)
 
+
 def getHeight(objBox):
     return objBox.height
+
 
 def getWidth(objBox):
     return objBox.width
 
 
-
-
 def addText(objs, textHeight, textLayer):
-
     num = 0
     for obj in objs:
-
         box = rs.BoundingBox(obj)
         center = rs.VectorScale(rs.VectorAdd(box[0], box[2]),0.5)
         textCenterVector = rs.VectorAdd(rs.VectorScale([1,0,0],textHeight/3), rs.VectorScale([0,1,0],textHeight/2))
@@ -40,10 +37,7 @@ def addText(objs, textHeight, textLayer):
         num += 1
 
 
-
-
 def rotatePeriHalf(obj, center, angle):
-
     rs.EnableRedraw(False)
     objRotated = rs.RotateObjects(obj, center, angle)
     box = rs.BoundingBox(objRotated)
@@ -58,7 +52,6 @@ def rotatePeriHalf(obj, center, angle):
 
 
 def rotateFinal(obj, center, angle):
-
     rs.EnableRedraw(False)
     objRotated = rs.CopyObjects(obj)
     rs.ObjectLayer(objRotated, layer=tempLayer)
@@ -82,14 +75,10 @@ def rotateFinal(obj, center, angle):
     vecHor = rs.VectorSubtract(pt1, pt0)
     vecVer = rs.VectorSubtract(pt3, pt0)
 
-
     return [objRotated, pt0, vecHor, vecVer]
 
 
-
-
 def rotateMinBoundingBox(obj):
-
     box = rs.BoundingBox(obj)
     pt0 = box[0]
     pt1 = box[1]
@@ -100,8 +89,6 @@ def rotateMinBoundingBox(obj):
     periHalf = rs.Distance(pt0, pt1) + rs.Distance(pt1, pt2)
     angle = 0
 
-
-
     for i in range(0, 90, 5):
 	    rotatedPeri = rotatePeriHalf(obj, center, i)
 	    if rotatedPeri < periHalf:
@@ -109,10 +96,6 @@ def rotateMinBoundingBox(obj):
 	        angle = i
 
     return rotateFinal(obj, center, angle)
-
-
-
-
 
 
 def slabMulti(id, index, lasercutLayer):
@@ -130,12 +113,8 @@ def slabMulti(id, index, lasercutLayer):
     dist = rs.Distance(pathStart, pathEnd)
     num = int(dist // 4000)
 
-
-
     box = rs.BoundingBox(id)
     vecCopyUni = rs.VectorSubtract(box[0], box[3])
-
-
 
     groupName = "group" + str(index)
 #    rs.AddGroup(groupName)
@@ -292,4 +271,3 @@ for objBox in slabHeightList:
         SortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
         # change dict{rowPt0}
         rowPt0[rowNum] = rs.VectorAdd(rowPt0[rowNum], objBox.vecHor)
-
