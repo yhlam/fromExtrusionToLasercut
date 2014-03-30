@@ -26,15 +26,15 @@ def getWidth(objBox):
 
 
 def addText(objs, textHeight, textLayer):
-    
+
     num = 0
     for obj in objs:
-    
+
         box = rs.BoundingBox(obj)
         center = rs.VectorScale(rs.VectorAdd(box[0], box[2]),0.5)
         textCenterVector = rs.VectorAdd(rs.VectorScale([1,0,0],textHeight/3), rs.VectorScale([0,1,0],textHeight/2))
         textBase = rs.VectorSubtract(center, textCenterVector)
-        
+
         text = rs.AddText(str(num), textBase, height=textHeight)
         rs.ObjectLayer(text, layer=textLayer)
         num += 1
@@ -43,7 +43,7 @@ def addText(objs, textHeight, textLayer):
 
 
 def rotatePeriHalf(obj, center, angle):
-    
+
     rs.EnableRedraw(False)
     objRotated = rs.RotateObjects(obj, center, angle)
     box = rs.BoundingBox(objRotated)
@@ -51,14 +51,14 @@ def rotatePeriHalf(obj, center, angle):
     pt1 = box[1]
     pt2 = box[2]
     periHalf = rs.Distance(pt0, pt1) + rs.Distance(pt1, pt2)
-    
+
     rs.RotateObjects(objRotated, center, angle*(-1))
-    
+
     return periHalf
-    
+
 
 def rotateFinal(obj, center, angle):
-    
+
     rs.EnableRedraw(False)
     objRotated = rs.CopyObjects(obj)
     rs.ObjectLayer(objRotated, layer=tempLayer)
@@ -67,22 +67,22 @@ def rotateFinal(obj, center, angle):
     pt0 = box[0]
     pt1 = box[1]
     pt2 = box[2]
-    
+
     distA = rs.Distance(pt0, pt1)
     distB = rs.Distance(pt1, pt2)
-    
+
     if distB > distA:
         objRotated = rs.RotateObject(objRotated, center, 90)
-    
+
     box = rs.BoundingBox(objRotated)
     pt0 = box[0]
     pt1 = box[1]
     pt3 = box[3]
-    
+
     vecHor = rs.VectorSubtract(pt1, pt0)
     vecVer = rs.VectorSubtract(pt3, pt0)
-    
-    
+
+
     return [objRotated, pt0, vecHor, vecVer]
 
 
@@ -99,18 +99,18 @@ def rotateMinBoundingBox(obj):
 
     periHalf = rs.Distance(pt0, pt1) + rs.Distance(pt1, pt2)
     angle = 0
-    
-    
+
+
 
     for i in range(0, 90, 5):
 	    rotatedPeri = rotatePeriHalf(obj, center, i)
 	    if rotatedPeri < periHalf:
 	        periHalf = rotatedPeri
 	        angle = i
-	    
+
     return rotateFinal(obj, center, angle)
-    
-    
+
+
 
 
 
@@ -141,7 +141,7 @@ def slabMulti(id, index, lasercutLayer):
 #    rs.AddGroup(groupName)
 
     item = []
-    
+
     text = rs.AddText(str(index), box[3], height=textHeight)
 #    rs.AddObjectToGroup(text, groupName)
     item += [text]
@@ -151,7 +151,7 @@ def slabMulti(id, index, lasercutLayer):
         crvCopied = rs.CopyObject(baseCrv, vecCopy)
 #        rs.AddObjectToGroup(crvCopied, groupName)
         item += [crvCopied]
-        
+
     return item
 
 
@@ -195,9 +195,9 @@ objList = []
 for item in objs:
     result = rotateMinBoundingBox(item)
     item = objBox(result[0], result[1], result[2], result[3])
-    
+
     objList += [item]
-    
+
 
 
 # slabMulti
@@ -205,38 +205,38 @@ for item in objs:
 slabHeightList = []
 i = 0
 for item in objList:
-    
+
     slabGroup = slabMulti(item.id, i, lasercutLayer)
     box = rs.BoundingBox(slabGroup)
     pt0 = box[0]
     pt1 = box[1]
     pt3 = box[3]
     center = rs.VectorScale(rs.VectorAdd(pt1, pt3), 0.5)
-    
-    
+
+
     width = rs.VectorLength(rs.VectorSubtract(pt1, pt0))
     height = rs.VectorLength(rs.VectorSubtract(pt3, pt0))
-    
-    
-    
+
+
+
     if width < height:
         slabGroup = rs.RotateObjects(slabGroup, center, 90)
         box = rs.BoundingBox(slabGroup)
         pt0 = box[0]
         pt1 = box[1]
         pt3 = box[3]
-        
-        
+
+
     #objBox obj
     slabGroup = objBox(slabGroup, pt0, rs.VectorSubtract(pt1, pt0), rs.VectorSubtract(pt3, pt0))
-    
-    
+
+
     slabHeightList += [slabGroup]
     i += 1
-    
 
 
-    
+
+
 slabHeightList = sorted(slabHeightList, key=getHeight, reverse=True)
 
 print "slabHeightList"
@@ -276,7 +276,7 @@ for objBox in slabHeightList:
         SortedRowRemainValueList = sorted(rowRemain.values())
         SortedRowRemainKeyList = sorted(rowRemain, key=rowRemain.__getitem__)
         #change dict{rowPt0}
-        rowPt0[len(rowPt0)] = rs.VectorAdd(newRowPt0, objBox.vecHor) 
+        rowPt0[len(rowPt0)] = rs.VectorAdd(newRowPt0, objBox.vecHor)
         #change objBox(topRowHighestObj)
         topRowHighestObj = objBox
     else:
